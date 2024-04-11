@@ -1,0 +1,21 @@
+<!-- 202132118_박혜정 -->
+
+<table class="table table-bordered ">
+  <% if (products.length > 0) { %>
+    <% products.forEach(product => { %>
+      <% if(upde) { %>
+        <tr>
+          <td><img src="<%= product.image %>" style="width:150px;height:200px;" onclick="location.href='/shop/detail/<%= product.mer_id %>'"></td>
+          <td><%= product.name %></td>
+          <td>가격: <%= product.price %></td>
+          <td>브랜드: <%= product.brand %></td>
+          </tr>
+      <% } %>
+    <% }); %>
+    <%- edit %>
+  <% } else { %>
+          <tr>
+            <td colspan="4">자료 없음</td>
+          </tr>
+  <% } %>
+</table> 

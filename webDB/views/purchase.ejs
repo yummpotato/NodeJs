@@ -1,0 +1,103 @@
+<!-- 202132118_박혜정 -->
+
+<% function getMerchandiseData(merId) { %>
+    <% for (let i = 0; i < products.length; i++) { %>
+        <% if (products[i].mer_id === merId) { %>
+            <% return products[i]; %>
+        <% } %>
+    <% } %>
+    <% return {}; %>
+<% } %>
+
+<% if(manager) { %>
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>구매자 ID</th>
+                <th>상품</th>
+                <th>상품명</th>
+                <th>단가</th>
+                <th>구매량</th>
+                <th>총금액</th>
+                <th>구매일</th>
+                <th>취소여부</th>
+                <th>수정</th>
+                <th>삭제</th>
+            </tr>
+        </thead>
+    
+        <% for (let i = 0; i < purchase.length; i++) { %>
+            <% const merchandiseData = getMerchandiseData(purchase[i].mer_id); %>
+        
+            <tr>
+                <td><%= purchase[i].loginid %></td>
+                <td><img width="150px" height="200px" src="<%= merchandiseData.image %>" alt="이미지"></td>
+                <td><%= merchandiseData.name %></td>
+                <td><%= merchandiseData.price %></td>
+                <td><%= purchase[i].qty %></td>
+                <td><%= purchase[i].total %></td>
+                <td><%= purchase[i].date %></td>
+                <td>
+                    <% if (purchase[i].cancel === 'N') { %>
+                        <button type="button" style="color: blue; background-color: transparent; border: 0;" onclick="location.href='/purchase/cancel_process/<%= purchase[i].purchase_id %>'">구매취소</button>
+                    <% } else { %>
+                        <span>취소된 상품</span>
+                    <% } %>
+                </td>
+                <td><button type="button" style="border: 0; background-color: transparent; color: blue; text-decoration: underline;" onclick="confirmUpdate('<%= purchase[i].purchase_id %>')">수정</button></td>
+                <td><button type="button" style="border: 0; background-color: transparent; color: blue; text-decoration: underline;" onclick="confirmDelete('<%= purchase[i].purchase_id %>')">삭제</button></td>
+            </tr>
+        <% } %>
+    </table>
+    <script>
+        function confirmUpdate(purchaseId) {
+          var confirmation = confirm("날짜가 수정됩니다. 계속 진행하시겠습니까?");
+      
+          if (confirmation) {
+            location.href = '/purchase/update_process/' + purchaseId;
+          }
+        }
+
+        function confirmDelete(purchaseId) {
+          var confirmation = confirm("정말로 삭제하시겠습니까?");
+      
+          if (confirmation) {
+            location.href = '/purchase/delete_process/' + purchaseId;
+          }
+        }
+      </script>
+<% } else { %>
+    <table class="table table-bordered ">
+        <thead>
+            <tr>
+                <th>상품</th>
+                <th>상품명</th>
+                <th>단가</th>
+                <th>구매량</th>
+                <th>총금액</th>
+                <th>구매일</th>
+                <th>취소여부</th>
+            </tr>
+        </thead>
+    
+        <% for (let i = 0; i < purchase.length; i++) { %>
+            <% const merchandiseData = getMerchandiseData(purchase[i].mer_id); %>
+        
+            <tr>
+                <td><img width="150px" height="200px" src="<%= merchandiseData.image %>" alt="이미지"></td>
+                <td><%= merchandiseData.name %></td>
+                <td><%= merchandiseData.price %></td>
+                <td><%= purchase[i].qty %></td>
+                <td><%= purchase[i].total %></td>
+                <td><%= purchase[i].date %></td>
+                <td>
+                    <% if (purchase[i].cancel === 'N') { %>
+                        <button type="button" style="color: blue; background-color: transparent; border: 0;" onclick="location.href='/purchase/cancel_process/<%= purchase[i].purchase_id %>'">구매취소</button>
+                    <% } else { %>
+                        <span>취소된 상품</span>
+                    <% } %>
+                </td>
+            </tr>
+        <% } %>
+    </table>
+<% } %>

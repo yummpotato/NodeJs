@@ -1,0 +1,110 @@
+<!-- 202132118_박혜정 -->
+
+<% function getMerchandiseData(merId) { %>
+  <% for (let i = 0; i < products.length; i++) { %>
+      <% if (products[i].mer_id === merId) { %>
+          <% return products[i]; %>
+      <% } %>
+  <% } %>
+  <% return {}; %>
+<% } %>
+
+<% if(manager) { %>
+<form action="/purchase/cart/purchase_process" method="post">
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+              <th>고객 ID</th>
+              <th>구매선택</th>
+              <th>상품</th>
+              <th>상품명</th>
+              <th>단가</th>
+              <th>담은날</th>
+              <th>수량</th>
+              <th></th>
+          </tr>
+      </thead>
+
+      <% for (let i = 0; i < cart.length; i++) { %>
+          <% const merchandiseData = getMerchandiseData(cart[i].mer_id); %>
+      
+          <tr>
+              <td><%= cart[i].loginid %></td>
+              <td><input type="checkbox" name="buy" value="<%= i %>"></td>
+              <td><img width="150px" height="200px" src="<%= merchandiseData.image %>" alt="이미지"></td>
+              <td><%= merchandiseData.name %></td>
+              <td><%= merchandiseData.price %></td>
+              <td><%= cart[i].date %></td>
+              <td><input type="number" name="qty"></td>
+              <td><button type="button" onclick="location.href='/purchase/cart/delete_process/<%= cart[i].cart_id %>'" style="border: 0; background-color: transparent; color: blue; text-decoration: underline;">삭제</button></td>
+          </tr>
+      <% } %>
+  </table>
+
+  <button type="submit" id="purchaseButton" class="btn btn-outline-primary btn-sm">결제</button>
+</form>
+<% } else { %>
+  <form action="/purchase/cart/purchase_process" method="post">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>구매선택</th>
+                <th>상품</th>
+                <th>상품명</th>
+                <th>단가</th>
+                <th>담은날</th>
+                <th>수량</th>
+                <th></th>
+            </tr>
+        </thead>
+  
+        <% for (let i = 0; i < cart.length; i++) { %>
+            <% const merchandiseData = getMerchandiseData(cart[i].mer_id); %>
+        
+            <tr>
+                <td><input type="checkbox" name="buy" value="<%= i %>"></td>
+                <td><img width="150px" height="200px" src="<%= merchandiseData.image %>" alt="이미지"></td>
+                <td><%= merchandiseData.name %></td>
+                <td><%= merchandiseData.price %></td>
+                <td><%= cart[i].date %></td>
+                <td><input type="number" name="qty"></td>
+                <td><button type="button" onclick="confirmDelete('<%= cart[i].cart_id %>')" style="border: 0; background-color: transparent; color: blue; text-decoration: underline;">삭제</button></td>
+            </tr>
+        <% } %>
+    </table>
+  
+    <button type="submit" id="purchaseButton" class="btn btn-outline-primary btn-sm">결제</button>
+  </form>
+<% } %>
+
+<script>
+  function confirmDelete(cartId) {
+    var confirmation = confirm("정말로 삭제하시겠습니까?");
+
+    if (confirmation) {
+      location.href = '/purchase/cart/delete_process/' + cartId;
+    }
+  }
+</script>
+
+<style>
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  #purchaseButton {
+    float: right;
+    margin-top: 10px;
+  }
+</style>

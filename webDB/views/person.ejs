@@ -1,0 +1,25 @@
+<!-- 202132118_박혜정 -->
+
+<table class="table table-bordered ">
+    <% if (users.length > 0) { %>
+      <% users.forEach(user => { %>
+        <% if(upde) { %>
+          <tr>
+            <td><%= user.loginid %></td>
+            <td><%= user.password %></td>
+            <td><%= user.name %></td>
+            <td><%= user.address %></td>
+            <td><%= user.tel %></td>
+            <td><%= user.birth %></td>
+            <td><%= user.class %></td>
+            <td><%= user.point %></td>
+            </tr>
+        <% } %>
+      <% }); %>
+      <%- edit %>
+    <% } else { %>
+            <tr>
+              <td colspan="4">자료 없음</td>
+            </tr>
+    <% } %>
+</table> 

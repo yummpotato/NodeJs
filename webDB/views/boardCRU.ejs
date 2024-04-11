@@ -1,0 +1,102 @@
+<!-- 202132118_박혜정 -->
+
+<div class="container">
+	<% if(edit=="C" ) { %>
+		<h2> 생성</h2>
+		<form action="/board/create_process" method="post">
+			<input type="hidden" name="type_id" value="<%=bts%>">
+			<input type="hidden" name="loginid" value="<%=loginid%>">
+			<div class="mb-3">
+				<label class="form-label" for="id">제목</label>
+				<input class="form-control" type="text" name="title" style="width:300px;" />
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="id">작성자</label>
+				<input class="form-control" type="text" name="loginid" value="<%=who%>" style="width:300px;" disabled />
+			</div>
+			<div class="mb-3">
+				<label class="form-label" for="id">내용</label>
+				<textarea class="form-control" name="content" style="width:800px;height: 200px;"></textarea>
+			</div>
+			<button class="btn btn-outline-primary btn-sm" type="submit">생성</button>
+
+		</form>
+		<% } else if(edit=="U" ) { %>
+				<h2><%= board[0].title %> 수정</h2>
+				<form action="/board/update_process" method="post">
+					<div class="mb-3">
+						<label class="form-label" for="id">제목</label>
+						<input class="form-control" type="text" name="title" value="<%= board[0].title %>"
+							style="width:300px;" />
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="id">작성자</label>
+						<input class="form-control" type="text" name="loginid" value="<%= who %>"
+							style="width:300px;" />
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="id">내용</label>
+						<textarea class="form-control" name="content"
+							style="width:800px;height: 200px;"><%= board[0].content %></textarea>
+					</div>
+					<button class="btn btn-outline-primary btn-sm" type="submit"
+						onclick="redirectToAfterUpdate()">수정</button>
+
+				</form>
+
+					<% } else { %>
+						<form action="/board/view/<%= board[0].type_id %>/1" method="get">
+							<div class="mb-3">
+								<label class="form-label" for="id">제목</label>
+								<input class="form-control" type="text" name="title" value="<%= board[0].title %>"
+									style="width:300px;" disabled />
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="id">작성자</label>
+								<input class="form-control" type="text" name="loginid" value="<%=who%>"
+									style="width:300px;" disabled />
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="id">작성일</label>
+								<input class="form-control" type="text" name="date" value="<%=board[0].date%>"
+									style="width:300px;" disabled />
+							</div>
+							<div class="mb-3">
+								<label class="form-label" for="id">내용</label>
+								<textarea class="form-control" name="content" style="width:800px;height: 200px;"
+									disabled><%= board[0].content %></textarea>
+							</div>
+							<button class="btn btn-outline-primary btn-sm" type="button"
+								onclick="redirectToView()">목록</button> &nbsp;&nbsp;
+							<button class="btn btn-outline-primary btn-sm" type="button"
+								onclick="redirectToUpdate()">수정</button> &nbsp;&nbsp;
+							<button class="btn btn-outline-primary btn-sm" type="button"
+								onClick="redirectToDelete()">삭제</button>
+						</form>
+						<% } %>
+
+</div>
+
+<script>
+	function redirectToView() {
+		// JavaScript를 사용하여 원하는 URL로 이동
+		window.location.href = "/board/view/<%= board[0].type_id %>/1";
+	}
+
+	function redirectToUpdate() {
+		window.location.href = "/board/update/<%= board[0].board_id %>/<%= board[0].type_id %>/<%= pNum %>"
+	}
+
+	function redirectToAfterUpdate() {
+		window.location.href = "/board/view/<%= board[0].type_id %>/<%= pNum %>";
+	}
+
+	function redirectToDelete() {
+		if (confirm("정말로 삭제하시겠습니까?") == false) {
+			return false
+		} else {
+			window.location.href = "/board/delete/<%= board[0].board_id %>/<%= board[0].type_id %>/<%= pNum %>";
+		}
+
+	}
+</script>
